@@ -7,11 +7,8 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <video class="bg-video" id="bgVideo" autoplay muted loop playsinline preload="auto">
-      <source src="./assets/Hauskonzert_Levit.mp4" type="video/mp4" />
-    </video>
+    <div class="bg-image" aria-hidden="true"></div>
     <div class="bg-overlay"></div>
-    <button class="video-toggle" id="videoToggle" type="button">Hintergrund starten</button>
 
     <header class="hero">
       <div class="hero-copy">
@@ -34,9 +31,18 @@
         </div>
       </div>
       <aside class="hero-frame">
-        <video class="hero-preview" autoplay muted loop playsinline preload="auto">
-          <source src="./assets/Hauskonzert_Levit.mp4" type="video/mp4" />
-        </video>
+        <a
+          class="hero-preview-link"
+          href="https://www.dropbox.com/scl/fi/32bb2vupyqjftxzdhsf5k/Igor-Levit.-Hauskonzert-live-at-Schloss-Bellevue-Berlin..mp4?rlkey=2q9ocoh41e07j6c8bq3ooqulu&st=8g3u5edq&dl=0"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img
+            class="hero-preview"
+            src="./assets/Hauskonzert_Levit_still.jpg"
+            alt="Igor Levit am Klavier beim Hauskonzert im Schloss Bellevue"
+          />
+        </a>
         <p class="kicker">Aufhänger</p>
         <h2>Vom Hauskonzert in den Staatsraum</h2>
         <p>
@@ -46,7 +52,7 @@
         <div class="button-row">
           <a
             class="button"
-            href="https://www.dropbox.com/scl/fi/32bb2vupyqjftxzdhsf5k/Igor-Levit.-Hauskonzert-live-at-Schloss-Bellevue-Berlin..mp4?rlkey=2q9ocoh41e07j6c8bq3ooqulu&st=17oq5ajw&dl=0"
+            href="https://www.dropbox.com/scl/fi/32bb2vupyqjftxzdhsf5k/Igor-Levit.-Hauskonzert-live-at-Schloss-Bellevue-Berlin..mp4?rlkey=2q9ocoh41e07j6c8bq3ooqulu&st=8g3u5edq&dl=0"
             target="_blank"
             rel="noreferrer"
           >

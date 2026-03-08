@@ -348,8 +348,6 @@ const reflectionQuestionList = document.querySelector("#reflectionQuestionList")
 const saveAllBtn = document.querySelector("#saveAllBtn");
 const exportAllBtn = document.querySelector("#exportAllBtn");
 const notesStatus = document.querySelector("#notesStatus");
-const bgVideo = document.querySelector("#bgVideo");
-const videoToggle = document.querySelector("#videoToggle");
 
 const savedAnswers = JSON.parse(localStorage.getItem(storageKey) || "{}");
 
@@ -577,7 +575,7 @@ function renderQuestionCard(question, mountPoint) {
     storeAnswer(question.id, textarea.value);
     const result = evaluateAnswer(textarea.value, question);
     feedbackHolder.innerHTML = feedbackHtml(result, question);
-    notesStatus.textContent = "Sofortfeedback aktualisiert.";
+    notesStatus.textContent = "Kommentar aktualisiert.";
   });
 
   mountPoint.appendChild(wrapper);
@@ -645,24 +643,6 @@ reflectionQuestions.forEach((question) => renderQuestionCard(question, reflectio
 
 saveAllBtn.addEventListener("click", saveAllAnswers);
 exportAllBtn.addEventListener("click", exportAllAnswers);
-
-videoToggle.addEventListener("click", async () => {
-  try {
-    bgVideo.muted = true;
-    await bgVideo.play();
-    videoToggle.textContent = "Hintergrund läuft";
-  } catch {
-    videoToggle.textContent = "Autoplay blockiert";
-  }
-});
-
-bgVideo.addEventListener("playing", () => {
-  videoToggle.textContent = "Hintergrund läuft";
-});
-
-if (!bgVideo.paused) {
-  videoToggle.textContent = "Hintergrund läuft";
-}
 
 renderComparison(comparisonData[0].id);
 renderSource(sourceClusters[0].id);
