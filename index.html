@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kultur im Rückzug? Pandemie, Privatheit und Öffentlichkeit</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <video
+      class="bg-video"
+      id="bgVideo"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+    >
+      <source src="./assets/Hauskonzert_Levit.mp4" type="video/mp4" />
+    </video>
+    <div class="bg-overlay"></div>
+    <button class="video-toggle" id="videoToggle" type="button">Hintergrund starten</button>
+
+    <header class="hero">
+      <p class="eyebrow">Interaktive Lern- und Erinnerungseinheit</p>
+      <h1>Kultur im Rückzug?</h1>
+      <p class="lead">
+        Ihr wart während des ersten Lockdowns ungefähr 11 Jahre alt. Diese Einheit verbindet
+        eure Erinnerungen mit Quellen zur Pandemie-Kultur, mit Stimmen von damaligen
+        Schüler*innen aus <em>school@home</em> und mit dem Vergleich zur Salonkultur des
+        Biedermeier.
+      </p>
+      <div class="hero-links">
+        <a class="button" href="#levit">Mit Levit starten</a>
+        <a class="button ghost" href="#vergleich">Zum Epochenvergleich</a>
+        <a class="button ghost" href="#labor">Zum Erinnerungslabor</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel" id="levit">
+        <div class="section-head">
+          <p class="kicker">Aufhänger</p>
+          <h2>Igor Levit im Schloss Bellevue</h2>
+        </div>
+        <div class="two-col">
+          <article class="card accent">
+            <p>
+              Das Hauskonzert ist mehr als ein nettes Musikvideo: Ein privates Format wird in
+              einen politisch aufgeladenen Raum verlegt und digital öffentlich. Wohnzimmerlogik,
+              Staatsraum und Livestream greifen ineinander.
+            </p>
+            <ul class="compact-list">
+              <li>Musik entsteht aus einem Moment des Rückzugs.</li>
+              <li>Das Konzert ist intim und zugleich massenmedial.</li>
+              <li>Privatheit wird nicht abgeschafft, sondern neu inszeniert.</li>
+            </ul>
+            <div class="button-row">
+              <a
+                class="button"
+                href="https://www.dropbox.com/scl/fi/32bb2vupyqjftxzdhsf5k/Igor-Levit.-Hauskonzert-live-at-Schloss-Bellevue-Berlin..mp4?rlkey=2q9ocoh41e07j6c8bq3ooqulu&st=17oq5ajw&dl=0"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Dropbox-Link zum Hauskonzert
+              </a>
+            </div>
+          </article>
+
+          <article class="card">
+            <h3>Leitfrage</h3>
+            <p class="question">
+              Was passiert mit Kultur, wenn Menschen aus medizinischen Gründen ins Private
+              zurückgedrängt werden, aber trotzdem Öffentlichkeit suchen?
+            </p>
+            <div class="quote-block">
+              <p class="quote">
+                Im Biedermeier wurde der Rückzug ins Private politisch begünstigt. In der
+                Pandemie wurde er medizinisch erzwungen. In beiden Fällen wurde Kultur zum
+                Vermittlungsraum.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" id="vergleich">
+        <div class="section-head">
+          <p class="kicker">Vergleich</p>
+          <h2>Biedermeier und Pandemie nebeneinander lesen</h2>
+        </div>
+        <p class="intro">
+          Klickt auf eine Dimension. Die Einheit zeigt, wo sich die beiden Situationen ähneln
+          und wo der Vergleich endet.
+        </p>
+        <div class="pill-row" id="comparisonTabs" aria-label="Vergleichsdimensionen"></div>
+        <article class="comparison-stage" id="comparisonStage"></article>
+      </section>
+
+      <section class="panel" id="atlas">
+        <div class="section-head">
+          <p class="kicker">Quellenatlas</p>
+          <h2>Was die vier Word-Dateien tatsächlich liefern</h2>
+        </div>
+        <p class="intro">
+          Die Word-Dateien wurden vollständig ausgelesen und zu inhaltlichen Feldern verdichtet.
+          Es geht nicht nur um Musik, sondern auch um Literatur, Clubs, digitale Bühnen,
+          Forschung und neue Öffentlichkeiten.
+        </p>
+        <div class="pill-row" id="sourceTabs" aria-label="Quellenfelder"></div>
+        <article class="source-stage" id="sourceStage"></article>
+      </section>
+
+      <section class="panel" id="stimmen">
+        <div class="section-head">
+          <p class="kicker">school@home</p>
+          <h2>Wie Schüler*innen den Lockdown beschrieben</h2>
+        </div>
+        <p class="intro">
+          Das PDF heißt inhaltlich <em>school@home</em>. Die Texte zeigen keine einheitliche
+          Erfahrung, sondern Spannungen: mehr Schlaf und mehr Zeit, aber auch Isolation,
+          Bildschirmmüdigkeit, Vermissen von Mensa, Pausen und echter Nähe.
+        </p>
+        <div class="pill-row" id="voiceFilters" aria-label="Filter für Stimmen"></div>
+        <div class="voice-grid" id="voiceGrid"></div>
+      </section>
+
+      <section class="panel" id="ordnung">
+        <div class="section-head">
+          <p class="kicker">Deutung</p>
+          <h2>Privat, halböffentlich oder öffentlich?</h2>
+        </div>
+        <p class="intro">
+          Ordnet die Situationen ein. Danach zeigt die App, warum die Grenze zwischen privat
+          und öffentlich in der Pandemie oft unscharf geworden ist.
+        </p>
+        <div class="scenario-grid" id="scenarioGrid"></div>
+      </section>
+
+      <section class="panel" id="quiz">
+        <div class="section-head">
+          <p class="kicker">Verstehen prüfen</p>
+          <h2>Fünf schnelle Thesenchecks</h2>
+        </div>
+        <div class="quiz-list" id="quizList"></div>
+      </section>
+
+      <section class="panel" id="labor">
+        <div class="section-head">
+          <p class="kicker">Erinnerungslabor</p>
+          <h2>Deine Spur zwischen 11 und 17</h2>
+        </div>
+        <div class="two-col">
+          <article class="card">
+            <h3>Schreibimpulse</h3>
+            <div class="prompt-list" id="promptList"></div>
+          </article>
+          <article class="card">
+            <h3>Arbeitsfeld</h3>
+            <label class="label" for="memoryNotes">Notiere deine Beobachtungen oder Stichworte.</label>
+            <textarea
+              id="memoryNotes"
+              placeholder="Was war damals privat? Was wurde trotzdem öffentlich? Welche Freizeitform war wichtig? Was war Verlust, was war Gewinn?"
+            ></textarea>
+            <div class="button-row">
+              <button class="button" id="saveNotesBtn" type="button">Lokal speichern</button>
+              <button class="button ghost" id="exportNotesBtn" type="button">Als Text exportieren</button>
+            </div>
+            <p class="small-note" id="notesStatus">Noch nichts gespeichert.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" id="auftrag">
+        <div class="section-head">
+          <p class="kicker">Arbeitsauftrag</p>
+          <h2>Mögliche Abschlussaufgabe</h2>
+        </div>
+        <ol class="task-list">
+          <li>Beschreibe am Beispiel des Levit-Hauskonzerts, wie Privatheit und Öffentlichkeit ineinandergreifen.</li>
+          <li>Vergleiche den pandemischen Rückzug ins Private mit dem Rückzug im Biedermeier.</li>
+          <li>Arbeite mit mindestens zwei Stimmen aus <em>school@home</em> und einem Feld aus dem Quellenatlas.</li>
+          <li>Beantworte abschließend die Frage: Welche Formen von Freizeitgestaltung schaffen Gemeinschaft, obwohl Menschen räumlich getrennt sind?</li>
+        </ol>
+      </section>
+
+      <section class="panel" id="transparenz">
+        <div class="section-head">
+          <p class="kicker">Quellentransparenz</p>
+          <h2>Verwendete Materialien in dieser Einheit</h2>
+        </div>
+        <div class="transparency-grid">
+          <article class="card">
+            <h3>Lokale Dateien</h3>
+            <ul class="compact-list">
+              <li><code>kultur_pandemie_linksammlung.docx</code></li>
+              <li><code>kultur_pandemie_linksammlung_erweitert.docx</code></li>
+              <li><code>kultur_pandemie_sammlung3.docx</code></li>
+              <li><code>kultur_pandemie_sammlung4.docx</code></li>
+              <li><code>ebookschool40home.pdf</code> / <em>school@home</em></li>
+              <li><code>Hauskonzert_Levit.mp4</code></li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Im Workspace abgelegte Extrakte</h3>
+            <p>
+              Alle Textquellen wurden in <code>source_extracts/</code> abgelegt. Die Lernumgebung
+              arbeitet mit den daraus herausgearbeiteten Motiven, Fragen und Schülerstimmen.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
