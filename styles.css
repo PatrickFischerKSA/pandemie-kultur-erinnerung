@@ -301,6 +301,20 @@ main {
   gap: 1rem;
 }
 
+.section-check-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.section-check-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.82), rgba(234, 240, 232, 0.62));
+}
+
+.section-check-prompt {
+  margin-bottom: 0.9rem;
+}
+
 .platform-link-box {
   margin-bottom: 0.95rem;
   padding: 0.85rem 0.95rem;

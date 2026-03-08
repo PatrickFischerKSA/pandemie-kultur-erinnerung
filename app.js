@@ -360,6 +360,60 @@ const reflectionQuestions = [
   }
 ];
 
+const sectionChecks = [
+  {
+    id: "levit-sicherung",
+    mountId: "levitCheckList",
+    title: "Sicherung: Warum ist Levit hier mehr als ein Musikbeispiel?",
+    intro:
+      "Halte den Kern des Abschnitts fest. Schreibe 2 bis 4 Sätze dazu, warum das Hauskonzert im Schloss Bellevue als Einstieg so ergiebig ist.",
+    prompt:
+      "Beziehe dich ausdrücklich auf Intimität, Staatsraum und digitale Öffentlichkeit.",
+    minWords: 45,
+    concepts: [
+      { label: "Hauskonzert/Intimität", keywords: ["hauskonzert", "intim", "intimität", "wohnzimmer", "nah"] },
+      { label: "Schloss/Bellevue/Staatsraum", keywords: ["bellevue", "schloss", "staat", "staatsraum", "repräsentativ"] },
+      { label: "Digitale Öffentlichkeit", keywords: ["stream", "digital", "online", "öffentlichkeit", "publikum"] }
+    ],
+    feedbackFocus:
+      "Stark ist die Antwort dann, wenn sie zeigt, dass gerade die Spannung zwischen privater Form und öffentlichem Ort den Aufhänger so ergiebig macht."
+  },
+  {
+    id: "vergleich-sicherung",
+    mountId: "comparisonCheckList",
+    title: "Sicherung: Was trägt der Vergleich und wo endet er?",
+    intro:
+      "Sichere den Vergleich unmittelbar nach dem Lesen. Formuliere knapp, worin die produktive Nähe zwischen Biedermeier und Pandemie liegt und worin der entscheidende Unterschied.",
+    prompt:
+      "Nenne mindestens einen gemeinsamen Zug und mindestens eine klare Grenze des Vergleichs.",
+    minWords: 55,
+    concepts: [
+      { label: "Rückzug/Ähnlichkeit", keywords: ["rückzug", "ähnlich", "privat", "innenraum", "salon"] },
+      { label: "Unterschiedliche Ursache", keywords: ["zensur", "repression", "medizinisch", "lockdown", "ansteckung"] },
+      { label: "Grenze des Vergleichs", keywords: ["grenze", "nicht dasselbe", "ausnahmezustand", "bürgerlich", "global"] }
+    ],
+    feedbackFocus:
+      "Wichtig ist hier nicht bloß 'beide ziehen sich zurück', sondern die klare Unterscheidung der historischen Ursachen und Strukturen."
+  },
+  {
+    id: "spurensuche-sicherung",
+    mountId: "sourceCheckList",
+    title: "Sicherung: Was zeigen die Einzelquellen zusammen?",
+    intro:
+      "Verdichte die Spurensuche in einer knappen Auswertung. Schreibe 2 bis 4 Sätze dazu, was die ausgewählten Zielseiten gemeinsam über Pandemie-Kultur sichtbar machen.",
+    prompt:
+      "Nenne dabei mindestens zwei konkrete Quellen oder Quellengruppen aus dem Abschnitt.",
+    minWords: 55,
+    concepts: [
+      { label: "Mindestens zwei Quellen", keywords: ["deutschlandfunk", "guardian", "srf", "frontiers", "first monday", "pmc", "school@home"] },
+      { label: "Digitale Kulturformen", keywords: ["stream", "online", "wohnzimmer", "plattform", "konzert", "livestream"] },
+      { label: "Gewinn oder Verlust", keywords: ["nähe", "gemeinschaft", "verlust", "ersatz", "reichweite", "hybrid"] }
+    ],
+    feedbackFocus:
+      "Gut ist die Sicherung dann, wenn sie nicht bloß Quellen aufzählt, sondern ihre gemeinsame Aussage über neue Kulturformen und ihre Grenzen bündelt."
+  }
+];
+
 const storageKey = "pandemie-kultur-erinnerung-answers-v2";
 
 const levitFocusEl = document.querySelector("#levitFocus");
@@ -369,6 +423,9 @@ const sourceTabs = document.querySelector("#sourceTabs");
 const sourceStage = document.querySelector("#sourceStage");
 const voiceFilters = document.querySelector("#voiceFilters");
 const voiceGrid = document.querySelector("#voiceGrid");
+const levitCheckList = document.querySelector("#levitCheckList");
+const comparisonCheckList = document.querySelector("#comparisonCheckList");
+const sourceCheckList = document.querySelector("#sourceCheckList");
 const analysisQuestionList = document.querySelector("#analysisQuestionList");
 const reflectionQuestionList = document.querySelector("#reflectionQuestionList");
 const saveAllBtn = document.querySelector("#saveAllBtn");
@@ -502,6 +559,69 @@ function liveFeedbackHtml(result) {
     <div class="feedback live ${result.level}">
       <p><strong>Zwischenstand.</strong> ${result.appreciation}</p>
       <p><strong>Plattformbezug:</strong> ${result.platformComment}</p>
+    </div>
+  `;
+}
+
+function evaluateSectionCheck(answer, sectionCheck) {
+  const normalized = normalizeText(answer);
+  const words = wordCount(answer);
+  const hits = [];
+  const missing = [];
+
+  sectionCheck.concepts.forEach((concept) => {
+    if (includesAny(normalized, concept.keywords)) {
+      hits.push(concept.label);
+    } else {
+      missing.push(concept.label);
+    }
+  });
+
+  const density = hits.length / sectionCheck.concepts.length;
+  let level = "ausbau";
+  if (density >= 0.8 && words >= sectionCheck.minWords) level = "stark";
+  else if (density >= 0.6 && words >= sectionCheck.minWords * 0.8) level = "solide";
+  else if (density >= 0.34) level = "ansatz";
+
+  let appreciation = "";
+  if (level === "stark") {
+    appreciation = "Du sicherst den Kern des Abschnitts bereits sehr klar.";
+  } else if (level === "solide") {
+    appreciation = "Die Hauptlinie ist erkennbar und schon gut getroffen.";
+  } else if (level === "ansatz") {
+    appreciation = "Ein tragfähiger Anfang ist da, aber die Sicherung bleibt noch lückenhaft.";
+  } else {
+    appreciation = "Die Sicherung ist noch zu knapp oder zu allgemein, um den Abschnitt wirklich festzuhalten.";
+  }
+
+  return {
+    words,
+    hits,
+    missing,
+    level,
+    appreciation
+  };
+}
+
+function sectionCheckFeedbackHtml(result, sectionCheck) {
+  const levelLabel = {
+    stark: "Sehr sicher",
+    solide: "Weitgehend sicher",
+    ansatz: "Im Ansatz sicher",
+    ausbau: "Noch unsicher"
+  }[result.level];
+
+  const missingText =
+    result.missing.length > 0
+      ? result.missing.join(", ")
+      : "Keine deutlichen Lücken in der Sicherung.";
+
+  return `
+    <div class="feedback ${result.level}">
+      <p><strong>${levelLabel}.</strong> ${result.appreciation}</p>
+      <p><strong>Schon gesichert:</strong> ${result.hits.length ? result.hits.join(", ") : "noch kaum Kerngedanken des Abschnitts"}</p>
+      <p><strong>Noch nachschärfen:</strong> ${missingText}</p>
+      <p><strong>Kommentar:</strong> ${sectionCheck.feedbackFocus}</p>
     </div>
   `;
 }
@@ -701,8 +821,63 @@ function renderQuestionCard(question, mountPoint) {
   mountPoint.appendChild(wrapper);
 }
 
+function renderSectionCheck(sectionCheck, mountPoint) {
+  const wrapper = document.createElement("article");
+  wrapper.className = "question-card section-check-card";
+  const storedValue = savedAnswers[sectionCheck.id] || "";
+
+  wrapper.innerHTML = `
+    <p class="kicker">Inhalt sichern</p>
+    <h3>${sectionCheck.title}</h3>
+    <p>${sectionCheck.intro}</p>
+    <p class="section-check-prompt"><strong>Arbeitsauftrag:</strong> ${sectionCheck.prompt}</p>
+    <div class="label-cloud rubric-cloud">
+      ${sectionCheck.concepts.map((concept) => `<span class="tag">${concept.label}</span>`).join("")}
+    </div>
+    <label class="label" for="${sectionCheck.id}">Deine Sicherung</label>
+    <textarea id="${sectionCheck.id}" data-question-id="${sectionCheck.id}" placeholder="Sichere hier die Kernaussage des Abschnitts.">${storedValue}</textarea>
+    <div class="button-row">
+      <button class="button evaluate-btn" type="button">Sicherung prüfen</button>
+      <button class="button ghost save-btn" type="button">Sicherung speichern</button>
+    </div>
+    <div class="feedback-holder"></div>
+  `;
+
+  const textarea = wrapper.querySelector("textarea");
+  const feedbackHolder = wrapper.querySelector(".feedback-holder");
+
+  wrapper.querySelector(".save-btn").addEventListener("click", () => {
+    storeAnswer(sectionCheck.id, textarea.value);
+    notesStatus.textContent = "Sicherung lokal gespeichert.";
+  });
+
+  wrapper.querySelector(".evaluate-btn").addEventListener("click", () => {
+    storeAnswer(sectionCheck.id, textarea.value);
+    const result = evaluateSectionCheck(textarea.value, sectionCheck);
+    feedbackHolder.innerHTML = sectionCheckFeedbackHtml(result, sectionCheck);
+    notesStatus.textContent = "Sicherung kommentiert.";
+  });
+
+  textarea.addEventListener("input", () => {
+    storeAnswer(sectionCheck.id, textarea.value);
+    if (wordCount(textarea.value) >= Math.max(12, Math.floor(sectionCheck.minWords * 0.35))) {
+      const result = evaluateSectionCheck(textarea.value, sectionCheck);
+      feedbackHolder.innerHTML = `
+        <div class="feedback live ${result.level}">
+          <p><strong>Zwischenstand.</strong> ${result.appreciation}</p>
+          <p><strong>Schon gesichert:</strong> ${result.hits.length ? result.hits.join(", ") : "noch keine klaren Kerngedanken"}</p>
+        </div>
+      `;
+    } else {
+      feedbackHolder.innerHTML = "";
+    }
+  });
+
+  mountPoint.appendChild(wrapper);
+}
+
 function exportAllAnswers() {
-  const sections = [...analysisQuestions, ...reflectionQuestions].map((question) => {
+  const sections = [...sectionChecks, ...analysisQuestions, ...reflectionQuestions].map((question) => {
     const value = savedAnswers[question.id] || "";
     return `## ${question.title}\n\n${value || "(keine Antwort)"}\n`;
   });
@@ -760,6 +935,14 @@ sourceClusters.forEach((cluster) => {
 
 analysisQuestions.forEach((question) => renderQuestionCard(question, analysisQuestionList));
 reflectionQuestions.forEach((question) => renderQuestionCard(question, reflectionQuestionList));
+sectionChecks.forEach((sectionCheck) => {
+  const mountMap = {
+    levitCheckList,
+    comparisonCheckList,
+    sourceCheckList
+  };
+  renderSectionCheck(sectionCheck, mountMap[sectionCheck.mountId]);
+});
 
 saveAllBtn.addEventListener("click", saveAllAnswers);
 exportAllBtn.addEventListener("click", exportAllAnswers);
