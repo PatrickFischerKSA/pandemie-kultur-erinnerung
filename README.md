@@ -1,13 +1,13 @@
 # Pandemie-Kultur-Erinnerung
 
-Interaktive Lern- und Erinnerungseinheit zur Kultur und zum Leben während der Pandemie.
+Interaktive Lern- und Erinnerungseinheit zur Kultur und zum Leben waehrend der Pandemie.
 
 ## Inhalte
 
-- Aufhänger: Hauskonzert mit Igor Levit im Schloss Bellevue
+- Aufhaenger: Hauskonzert mit Igor Levit im Schloss Bellevue
 - Vergleich: Biedermeier/Salon und pandemischer Rückzug ins Private
 - Quellenatlas auf Basis der vier ausgelesenen Word-Dateien
-- Schüler*innen-Stimmen aus `ebookschool40home.pdf` / `school@home`
+- Schueler*innen-Stimmen aus `school_at_home.pdf` / `school@home`
 - Interaktive Zuordnungs- und Reflexionsmodule
 
 ## Dateien
@@ -16,6 +16,7 @@ Interaktive Lern- und Erinnerungseinheit zur Kultur und zum Leben während der P
 - `styles.css`
 - `app.js`
 - `assets/Hauskonzert_Levit.mp4`
+- `assets/school_at_home.pdf`
 - `source_extracts/`
 
 ## Quellenbasis im Workspace
