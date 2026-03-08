@@ -497,6 +497,15 @@ function feedbackHtml(result, question) {
   `;
 }
 
+function liveFeedbackHtml(result) {
+  return `
+    <div class="feedback live ${result.level}">
+      <p><strong>Zwischenstand.</strong> ${result.appreciation}</p>
+      <p><strong>Plattformbezug:</strong> ${result.platformComment}</p>
+    </div>
+  `;
+}
+
 function renderLevitFocus() {
   levitFocusEl.innerHTML = levitFocus
     .map(
@@ -655,6 +664,19 @@ function renderQuestionCard(question, mountPoint) {
         : `${words} Wörter. Binde jetzt sichtbar ${question.platformLinks.map((link) => link.label).join(", ")} ein.`;
   };
 
+  const updateLiveFeedback = () => {
+    const text = textarea.value.trim();
+    const minPreviewWords = Math.max(18, Math.floor(question.minWords * 0.18));
+
+    if (wordCount(text) < minPreviewWords) {
+      feedbackHolder.innerHTML = "";
+      return;
+    }
+
+    const result = evaluateAnswer(text, question);
+    feedbackHolder.innerHTML = liveFeedbackHtml(result);
+  };
+
   wrapper.querySelector(".save-btn").addEventListener("click", () => {
     storeAnswer(question.id, textarea.value);
     notesStatus.textContent = "Antworten lokal gespeichert.";
@@ -670,9 +692,11 @@ function renderQuestionCard(question, mountPoint) {
   textarea.addEventListener("input", () => {
     storeAnswer(question.id, textarea.value);
     updateDraftStatus();
+    updateLiveFeedback();
   });
 
   updateDraftStatus();
+  updateLiveFeedback();
 
   mountPoint.appendChild(wrapper);
 }

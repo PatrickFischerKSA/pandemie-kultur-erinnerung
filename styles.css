@@ -22,6 +22,7 @@ body {
   min-height: 100vh;
   color: var(--ink);
   font-family: "Avenir Next", "Trebuchet MS", sans-serif;
+  overflow-x: hidden;
   background:
     radial-gradient(circle at 14% 12%, rgba(207, 154, 98, 0.22), transparent 28%),
     linear-gradient(160deg, #1b1415 0%, #4b2b22 34%, #76533e 64%, #2f241f 100%);
@@ -89,6 +90,7 @@ main {
   padding: 1.2rem;
   border-radius: 26px;
   backdrop-filter: blur(8px);
+  min-width: 0;
 }
 
 .hero-copy {
@@ -223,6 +225,7 @@ main {
     );
   box-shadow: var(--shadow);
   backdrop-filter: blur(7px);
+  min-width: 0;
 }
 
 .section-head {
@@ -400,6 +403,10 @@ textarea {
   min-height: 4rem;
 }
 
+.feedback.live {
+  border: 1px dashed rgba(33, 93, 103, 0.24);
+}
+
 .feedback.stark {
   background: rgba(100, 130, 88, 0.18);
 }
@@ -520,7 +527,8 @@ code {
   }
 
   .hero h1 {
-    font-size: clamp(2.45rem, 13vw, 4rem);
+    font-size: clamp(2.2rem, 11.5vw, 3.35rem);
+    max-width: 8ch;
   }
 
   .hero-subtitle {
@@ -596,6 +604,17 @@ code {
     bottom: 0.65rem;
     text-align: center;
     font-size: 0.78rem;
+  }
+
+  .hero-copy,
+  .hero-frame,
+  .panel,
+  .question-card,
+  .comparison-card,
+  .source-link-card,
+  .source-top,
+  .meta-box {
+    width: 100%;
   }
 
   .quote-block {
