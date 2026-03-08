@@ -298,6 +298,37 @@ main {
   gap: 1rem;
 }
 
+.platform-link-box {
+  margin-bottom: 0.95rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 18px;
+  background: rgba(197, 221, 226, 0.26);
+  border: 1px solid rgba(33, 93, 103, 0.16);
+}
+
+.platform-label {
+  margin-bottom: 0.55rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.platform-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.jump-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.2rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  text-decoration: none;
+  background: rgba(33, 93, 103, 0.1);
+  border: 1px solid rgba(33, 93, 103, 0.2);
+}
+
 .voice-card {
   display: grid;
   gap: 0.75rem;
@@ -401,6 +432,12 @@ textarea {
   color: rgba(25, 19, 21, 0.72);
 }
 
+.draft-status {
+  margin: 0.75rem 0 0.9rem;
+  font-size: 0.96rem;
+  color: rgba(25, 19, 21, 0.72);
+}
+
 code {
   font-family: "SFMono-Regular", "Menlo", monospace;
 }
@@ -422,6 +459,48 @@ code {
   .source-link-grid {
     grid-template-columns: 1fr;
   }
+
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .section-head h2 {
+    font-size: clamp(1.75rem, 6vw, 2.35rem);
+  }
+
+  .question-card h3,
+  .source-link-card h3,
+  .comparison-card h3 {
+    font-size: 1.28rem;
+  }
+}
+
+@media (max-width: 820px) {
+  .pill-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.4rem;
+    margin-right: -0.2rem;
+    scrollbar-width: thin;
+  }
+
+  .pill-row .pill {
+    flex: 0 0 auto;
+  }
+
+  .comparison-stage,
+  .source-stage {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .source-top,
+  .meta-box,
+  .comparison-card,
+  .source-link-card,
+  .focus-card {
+    padding: 0.9rem;
+  }
 }
 
 @media (max-width: 640px) {
@@ -430,5 +509,96 @@ code {
   .hero-frame {
     padding: 1rem;
     border-radius: 22px;
+  }
+
+  .hero {
+    padding: 4.2rem 0.85rem 1.3rem;
+  }
+
+  main {
+    padding: 0 0.85rem 3rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.45rem, 13vw, 4rem);
+  }
+
+  .hero-subtitle {
+    font-size: 1.15rem;
+  }
+
+  .lead,
+  .intro,
+  .question-card p,
+  .comparison-card p,
+  .source-link-card p,
+  .source-top p,
+  .meta-box li {
+    font-size: 0.98rem;
+  }
+
+  .button-row,
+  .hero-links,
+  .platform-links {
+    gap: 0.5rem;
+  }
+
+  .button,
+  .jump-chip,
+  .pill {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pill-row .pill {
+    width: auto;
+  }
+
+  .voice-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  textarea {
+    min-height: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .panel {
+    padding: 0.9rem;
+    border-radius: 20px;
+  }
+
+  .hero-copy,
+  .hero-frame,
+  .focus-card,
+  .comparison-card,
+  .source-link-card,
+  .meta-box,
+  .card,
+  .question-card,
+  .source-top {
+    padding: 0.85rem;
+    border-radius: 18px;
+  }
+
+  .eyebrow,
+  .kicker {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+  }
+
+  .hero-preview-link::after {
+    left: 0.65rem;
+    right: 0.65rem;
+    bottom: 0.65rem;
+    text-align: center;
+    font-size: 0.78rem;
+  }
+
+  .quote-block {
+    padding: 0.8rem;
   }
 }

@@ -239,6 +239,10 @@ const analysisQuestions = [
     prompt:
       "Erkläre, warum das Hauskonzert von Igor Levit im Schloss Bellevue ein besonders geeigneter Aufhänger für eine Lerneinheit über Pandemie-Kultur ist. Gehe auf den Ort, die Form des Hauskonzerts, die digitale Öffentlichkeit und die symbolische Wirkung ein.",
     minWords: 140,
+    platformLinks: [
+      { label: "Levit lesen", href: "#levit", keywords: ["levit", "hauskonzert", "bellevue", "staatsraum", "schloss"] },
+      { label: "Spurensuche", href: "#quellen", keywords: ["deutschlandfunk", "guardian", "srf", "lagerfeuer", "wohnzimmer"] }
+    ],
     concepts: [
       { label: "Ort und Symbolik", keywords: ["bellevue", "schloss", "staat", "bundespraesident", "bundespräsident", "staatsraum", "symbol"] },
       { label: "Hauskonzert als intime Form", keywords: ["hauskonzert", "intim", "nähe", "naehe", "wohnzimmer", "privat"] },
@@ -256,6 +260,10 @@ const analysisQuestions = [
     prompt:
       "Vergleiche den Rückzug ins Private im Biedermeier mit dem Rückzug in der Pandemie. Arbeite mindestens vier Unterschiede oder Spannungen heraus und erkläre, warum der Vergleich hilfreich, aber auch begrenzt ist.",
     minWords: 180,
+    platformLinks: [
+      { label: "Vergleich", href: "#vergleich", keywords: ["biedermeier", "vormärz", "zensur", "salon", "halböffentlichkeit"] },
+      { label: "school@home", href: "#school", keywords: ["school@home", "teams", "mensa", "bildschirm", "freunde"] }
+    ],
     concepts: [
       { label: "Unterschiedliche Ursachen", keywords: ["zensur", "repression", "politisch", "medizinisch", "ansteckung", "lockdown"] },
       { label: "Raum und Privatsphäre", keywords: ["raum", "wohnraum", "privatsphäre", "privatsphaere", "zimmer", "salon", "sofa"] },
@@ -273,6 +281,11 @@ const analysisQuestions = [
     prompt:
       "Nutze mindestens eine Stimme aus school@home und mindestens zwei einzelne Zielseiten aus den Materialsammlungen. Erkläre, wie sich während der Pandemie Freizeitgestaltung, Öffentlichkeit und Rückzug ins Private gegenseitig verändert haben und welche Folgen bis heute sichtbar sind.",
     minWords: 180,
+    platformLinks: [
+      { label: "Spurensuche", href: "#quellen", keywords: ["deutschlandfunk", "guardian", "srf", "frontiers", "first monday", "pmc"] },
+      { label: "school@home", href: "#school", keywords: ["school@home", "teams", "mensa", "familie", "bildschirm"] },
+      { label: "Vergleich", href: "#vergleich", keywords: ["biedermeier", "rückzug", "öffentlichkeit", "freizeit"] }
+    ],
     concepts: [
       { label: "school@home-Bezug", keywords: ["school@home", "mensa", "bildschirm", "freunde", "familie", "teams"] },
       { label: "Einzelquellen aus der Linksammlung", keywords: ["deutschlandfunk", "guardian", "srf", "frontiers", "first monday", "pmc"] },
@@ -293,6 +306,10 @@ const reflectionQuestions = [
     prompt:
       "Beschreibe einen Moment aus dem Lockdown, in dem Privatheit und Öffentlichkeit für dich ineinander übergingen: zum Beispiel Teams-Unterricht, Videocall, Streaming, Familienalltag oder eine neue Freizeitpraxis.",
     minWords: 100,
+    platformLinks: [
+      { label: "school@home", href: "#school", keywords: ["school@home", "teams", "mensa", "bildschirm", "pause"] },
+      { label: "Levit lesen", href: "#levit", keywords: ["hauskonzert", "öffentlichkeit", "privat", "stream"] }
+    ],
     concepts: [
       { label: "Konkrete Szene", keywords: ["ich", "als", "während", "waehrend", "damals", "moment"] },
       { label: "Privat/Öffentlich", keywords: ["privat", "öffentlich", "oeffentlich", "halböffentlich", "halboeffentlich", "kamera", "zimmer"] },
@@ -308,6 +325,10 @@ const reflectionQuestions = [
     prompt:
       "Erkläre, was aus der Pandemiezeit heute noch in deinem Alltag, deinem Medienverhalten, deinem Blick auf Schule oder deiner Art von Freizeitgestaltung nachwirkt.",
     minWords: 110,
+    platformLinks: [
+      { label: "school@home", href: "#school", keywords: ["school@home", "heute", "teams", "bildschirm", "mensa"] },
+      { label: "Spurensuche", href: "#quellen", keywords: ["hybrid", "digital", "stream", "pmc", "frontiers"] }
+    ],
     concepts: [
       { label: "Gegenwart", keywords: ["heute", "jetzt", "noch", "immer", "bis heute"] },
       { label: "Schule/Alltag", keywords: ["schule", "unterricht", "organisation", "digital", "teams", "abgabe"] },
@@ -323,6 +344,11 @@ const reflectionQuestions = [
     prompt:
       "Formuliere eine Position für die Zukunft: Welche digitalen Formen aus Pandemie-Kultur oder Fernunterricht sollten erhalten bleiben, welche sollten bewusst wieder zurückgedrängt werden? Begründe differenziert.",
     minWords: 120,
+    platformLinks: [
+      { label: "Spurensuche", href: "#quellen", keywords: ["pmc", "frontiers", "srf", "hybrid", "online"] },
+      { label: "school@home", href: "#school", keywords: ["school@home", "mensa", "begegnung", "bildschirm"] },
+      { label: "Vergleich", href: "#vergleich", keywords: ["biedermeier", "rückzug", "öffentlichkeit", "grenze"] }
+    ],
     concepts: [
       { label: "Klare Position", keywords: ["ich finde", "sollte", "soll nicht", "meiner ansicht", "beibehalten"] },
       { label: "Was bleiben kann", keywords: ["hybrid", "digitale abgabe", "mediathek", "flexibel", "online"] },
@@ -373,12 +399,19 @@ function evaluateAnswer(answer, question) {
   const words = wordCount(answer);
   const hits = [];
   const missing = [];
+  const platformHits = [];
 
   question.concepts.forEach((concept) => {
     if (includesAny(normalized, concept.keywords)) {
       hits.push(concept.label);
     } else {
       missing.push(concept.label);
+    }
+  });
+
+  question.platformLinks.forEach((platformLink) => {
+    if (includesAny(normalized, platformLink.keywords)) {
+      platformHits.push(platformLink.label);
     }
   });
 
@@ -405,14 +438,35 @@ function evaluateAnswer(answer, question) {
     ? "Quellenbezug ist erkennbar."
     : "Noch fehlt ein klar erkennbarer Quellenbezug. Nenne school@home, Levit oder einzelne Linkquellen direkt.";
 
+  const platformComment =
+    platformHits.length > 0
+      ? `Du bindest deine Antwort bereits an diese Plattformbereiche zurück: ${platformHits.join(", ")}.`
+      : `Noch fehlt der sichtbare Rückbezug auf die Plattform. Greife ausdrücklich Abschnitte wie ${question.platformLinks
+          .map((link) => link.label)
+          .join(", ")} auf.`;
+
+  let appreciation = "";
+  if (level === "stark") {
+    appreciation = "Das ist bereits eine tragfähige Deutung, nicht nur eine Sammlung einzelner Beobachtungen.";
+  } else if (level === "solide") {
+    appreciation = "Die Antwort hat Substanz. Jetzt lohnt es sich, die stärksten Beobachtungen noch genauer an den Materialien zu erden.";
+  } else if (level === "ansatz") {
+    appreciation = "Du hast einen brauchbaren Einstieg gefunden. Mit einem präzisen Rückgriff auf die Plattform wird daraus schneller eine belastbare Antwort.";
+  } else {
+    appreciation = "Der Anfang ist da. Die Plattform liefert dir genug Material, um daraus eine deutlich konkretere Antwort zu machen.";
+  }
+
   return {
     words,
     hits,
     missing,
+    platformHits,
     sourceHit,
     level,
     comment,
-    sourceComment
+    sourceComment,
+    platformComment,
+    appreciation
   };
 }
 
@@ -432,8 +486,10 @@ function feedbackHtml(result, question) {
   return `
     <div class="feedback ${result.level}">
       <p><strong>${levelLabel}.</strong> ${result.comment}</p>
+      <p><strong>Würdigung:</strong> ${result.appreciation}</p>
       <p><strong>Umfang:</strong> ${result.words} Wörter. Erwartet sind mindestens ${question.minWords}.</p>
       <p><strong>Schon sichtbar:</strong> ${result.hits.length ? result.hits.join(", ") : "noch kaum tragende Aspekte"}</p>
+      <p><strong>Plattformbezug:</strong> ${result.platformComment}</p>
       <p><strong>Noch ergänzen:</strong> ${missingText}</p>
       <p><strong>Quellenbezug:</strong> ${result.sourceComment}</p>
       <p><strong>Kommentar:</strong> ${question.feedbackFocus}</p>
@@ -551,11 +607,22 @@ function renderQuestionCard(question, mountPoint) {
   wrapper.innerHTML = `
     <h3>${question.title}</h3>
     <p>${question.prompt}</p>
+    <div class="platform-link-box">
+      <p class="platform-label">Arbeite auf dieser Seite besonders mit:</p>
+      <div class="platform-links">
+        ${question.platformLinks
+          .map((link) => `<a class="jump-chip" href="${link.href}">${link.label}</a>`)
+          .join("")}
+      </div>
+    </div>
     <div class="label-cloud rubric-cloud">
       ${question.concepts.map((concept) => `<span class="tag">${concept.label}</span>`).join("")}
     </div>
     <label class="label" for="${question.id}">Deine Antwort</label>
     <textarea id="${question.id}" data-question-id="${question.id}" placeholder="Schreibe hier deine Antwort.">${storedValue}</textarea>
+    <p class="draft-status">Noch kein Text. Nimm mindestens einen klaren Bezug auf ${question.platformLinks
+      .map((link) => link.label)
+      .join(", ")} auf.</p>
     <div class="button-row">
       <button class="button evaluate-btn" type="button">Kommentar anzeigen</button>
       <button class="button ghost save-btn" type="button">Antwort speichern</button>
@@ -565,6 +632,28 @@ function renderQuestionCard(question, mountPoint) {
 
   const textarea = wrapper.querySelector("textarea");
   const feedbackHolder = wrapper.querySelector(".feedback-holder");
+  const draftStatus = wrapper.querySelector(".draft-status");
+
+  const updateDraftStatus = () => {
+    const text = textarea.value.trim();
+    const words = wordCount(text);
+    if (!text) {
+      draftStatus.textContent = `Noch kein Text. Nimm mindestens einen klaren Bezug auf ${question.platformLinks
+        .map((link) => link.label)
+        .join(", ")} auf.`;
+      return;
+    }
+
+    const normalized = normalizeText(text);
+    const linkedSections = question.platformLinks
+      .filter((link) => includesAny(normalized, link.keywords))
+      .map((link) => link.label);
+
+    draftStatus.textContent =
+      linkedSections.length > 0
+        ? `${words} Wörter. Schon angebunden an: ${linkedSections.join(", ")}.`
+        : `${words} Wörter. Binde jetzt sichtbar ${question.platformLinks.map((link) => link.label).join(", ")} ein.`;
+  };
 
   wrapper.querySelector(".save-btn").addEventListener("click", () => {
     storeAnswer(question.id, textarea.value);
@@ -577,6 +666,13 @@ function renderQuestionCard(question, mountPoint) {
     feedbackHolder.innerHTML = feedbackHtml(result, question);
     notesStatus.textContent = "Kommentar aktualisiert.";
   });
+
+  textarea.addEventListener("input", () => {
+    storeAnswer(question.id, textarea.value);
+    updateDraftStatus();
+  });
+
+  updateDraftStatus();
 
   mountPoint.appendChild(wrapper);
 }
@@ -628,7 +724,7 @@ sourceClusters.forEach((cluster) => {
   sourceTabs.appendChild(button);
 });
 
-  ["alle", "isolation", "freizeit", "bildschirm", "teams", "familie", "mensa"].forEach((filter) => {
+["alle", "isolation", "freizeit", "bildschirm", "teams", "familie", "mensa"].forEach((filter) => {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "pill";
