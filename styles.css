@@ -192,6 +192,12 @@ main {
   box-shadow: 0 10px 24px rgba(84, 26, 22, 0.2);
 }
 
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
 .button.ghost {
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.35);
@@ -451,6 +457,39 @@ textarea {
 .small-note {
   margin-top: 0.8rem;
   color: rgba(25, 19, 21, 0.72);
+}
+
+.upload-card {
+  margin-top: 1rem;
+}
+
+.upload-meta {
+  margin-top: 0.9rem;
+  padding: 0.95rem 1rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--line);
+}
+
+.upload-meta p:last-child {
+  margin-bottom: 0;
+}
+
+.disabled-link[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .draft-status {

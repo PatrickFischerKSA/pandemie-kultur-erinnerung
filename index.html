@@ -191,6 +191,39 @@
             wie viel Wohnzimmer, Bildschirm und Öffentlichkeit in deiner Fassung sichtbar sein sollen.
           </p>
         </div>
+        <div class="card upload-card">
+          <h3>Produkt hochladen und lokal abgeben</h3>
+          <p>
+            Du kannst dein fertiges Produkt hier technisch sicher in dieser Einheit ablegen.
+            Die Datei bleibt auf diesem Gerät im Browser gespeichert und wird nicht an einen
+            externen Server übertragen.
+          </p>
+          <div class="label-cloud rubric-cloud">
+            <span class="tag">lokale Speicherung</span>
+            <span class="tag">keine Server-Übertragung</span>
+            <span class="tag">Datei-Prüfung</span>
+          </div>
+          <input
+            id="productFileInput"
+            class="visually-hidden"
+            type="file"
+            accept=".pdf,.txt,.doc,.docx,.mp3,.m4a,.wav,.ogg,.mp4,.mov,.webm"
+          />
+          <div class="button-row">
+            <button class="button" id="chooseProductBtn" type="button">Produkt auswählen</button>
+            <button class="button ghost" id="saveProductBtn" type="button">Lokal hochladen</button>
+            <button class="button ghost" id="deleteProductBtn" type="button">Ablage leeren</button>
+          </div>
+          <div class="upload-meta" id="productMeta">
+            <p class="small-note">Noch kein Produkt ausgewählt.</p>
+          </div>
+          <div class="button-row">
+            <a class="button ghost disabled-link" id="downloadProductBtn" href="#" download aria-disabled="true">Gespeicherte Datei öffnen</a>
+          </div>
+          <p class="small-note" id="productUploadStatus">
+            Erlaubt sind Text-, PDF-, Audio- und Videoformate bis 80 MB.
+          </p>
+        </div>
       </section>
     </main>
 

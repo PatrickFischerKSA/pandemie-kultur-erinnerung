@@ -431,8 +431,24 @@ const reflectionQuestionList = document.querySelector("#reflectionQuestionList")
 const saveAllBtn = document.querySelector("#saveAllBtn");
 const exportAllBtn = document.querySelector("#exportAllBtn");
 const notesStatus = document.querySelector("#notesStatus");
+const productFileInput = document.querySelector("#productFileInput");
+const chooseProductBtn = document.querySelector("#chooseProductBtn");
+const saveProductBtn = document.querySelector("#saveProductBtn");
+const deleteProductBtn = document.querySelector("#deleteProductBtn");
+const productMeta = document.querySelector("#productMeta");
+const downloadProductBtn = document.querySelector("#downloadProductBtn");
+const productUploadStatus = document.querySelector("#productUploadStatus");
 
 const savedAnswers = JSON.parse(localStorage.getItem(storageKey) || "{}");
+const uploadDbName = "pandemie-kultur-erinnerung-uploads-v1";
+const uploadStoreName = "uploads";
+const uploadKey = "abschlussprodukt";
+const maxUploadSize = 80 * 1024 * 1024;
+const allowedExtensions = [".pdf", ".txt", ".doc", ".docx", ".mp3", ".m4a", ".wav", ".ogg", ".mp4", ".mov", ".webm"];
+
+let selectedProductFile = null;
+let savedProductRecord = null;
+let productDownloadUrl = null;
 
 function normalizeText(value) {
   return String(value)
@@ -445,6 +461,153 @@ function normalizeText(value) {
 
 function wordCount(value) {
   return value.trim().split(/\s+/).filter(Boolean).length;
+}
+
+function formatBytes(bytes) {
+  if (!Number.isFinite(bytes) || bytes <= 0) return "0 B";
+  const units = ["B", "KB", "MB", "GB"];
+  let value = bytes;
+  let unitIndex = 0;
+
+  while (value >= 1024 && unitIndex < units.length - 1) {
+    value /= 1024;
+    unitIndex += 1;
+  }
+
+  return `${value.toFixed(value >= 10 || unitIndex === 0 ? 0 : 1)} ${units[unitIndex]}`;
+}
+
+function getFileExtension(filename) {
+  const lastDot = filename.lastIndexOf(".");
+  return lastDot >= 0 ? filename.slice(lastDot).toLowerCase() : "";
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function validateProductFile(file) {
+  const extension = getFileExtension(file.name);
+  if (!allowedExtensions.includes(extension)) {
+    return `Dieses Format ist nicht freigegeben. Erlaubt sind: ${allowedExtensions.join(", ")}.`;
+  }
+
+  if (file.size > maxUploadSize) {
+    return `Die Datei ist zu groß. Erlaubt sind maximal ${formatBytes(maxUploadSize)}.`;
+  }
+
+  return "";
+}
+
+function updateProductDownload(record) {
+  if (productDownloadUrl) {
+    URL.revokeObjectURL(productDownloadUrl);
+    productDownloadUrl = null;
+  }
+
+  if (record?.blob) {
+    productDownloadUrl = URL.createObjectURL(record.blob);
+    downloadProductBtn.href = productDownloadUrl;
+    downloadProductBtn.download = record.name;
+    downloadProductBtn.setAttribute("aria-disabled", "false");
+    downloadProductBtn.classList.remove("disabled-link");
+  } else {
+    downloadProductBtn.href = "#";
+    downloadProductBtn.removeAttribute("download");
+    downloadProductBtn.setAttribute("aria-disabled", "true");
+    downloadProductBtn.classList.add("disabled-link");
+  }
+}
+
+function renderProductMeta(record, sourceLabel) {
+  if (!record) {
+    productMeta.innerHTML = `<p class="small-note">Noch kein Produkt ausgewählt.</p>`;
+    updateProductDownload(null);
+    return;
+  }
+
+  const savedAtText = record.savedAt
+    ? new Date(record.savedAt).toLocaleString("de-CH")
+    : "noch nicht lokal gespeichert";
+
+  productMeta.innerHTML = `
+    <p><strong>Datei:</strong> ${escapeHtml(record.name)}</p>
+    <p><strong>Format:</strong> ${escapeHtml(record.type || getFileExtension(record.name) || "unbekannt")}</p>
+    <p><strong>Größe:</strong> ${formatBytes(record.size)}</p>
+    <p><strong>Status:</strong> ${escapeHtml(sourceLabel)}</p>
+    <p><strong>Gespeichert:</strong> ${escapeHtml(savedAtText)}</p>
+  `;
+
+  updateProductDownload(record.savedAt ? record : null);
+}
+
+function openUploadDb() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(uploadDbName, 1);
+
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      if (!db.objectStoreNames.contains(uploadStoreName)) {
+        db.createObjectStore(uploadStoreName);
+      }
+    };
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error || new Error("IndexedDB konnte nicht geöffnet werden."));
+  });
+}
+
+async function saveProductRecord(record) {
+  const db = await openUploadDb();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(uploadStoreName, "readwrite");
+    transaction.objectStore(uploadStoreName).put(record, uploadKey);
+    transaction.oncomplete = () => {
+      db.close();
+      resolve();
+    };
+    transaction.onerror = () => {
+      db.close();
+      reject(transaction.error || new Error("Die Datei konnte nicht gespeichert werden."));
+    };
+  });
+}
+
+async function loadProductRecord() {
+  const db = await openUploadDb();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(uploadStoreName, "readonly");
+    const request = transaction.objectStore(uploadStoreName).get(uploadKey);
+    request.onsuccess = () => {
+      db.close();
+      resolve(request.result || null);
+    };
+    request.onerror = () => {
+      db.close();
+      reject(request.error || new Error("Die gespeicherte Datei konnte nicht geladen werden."));
+    };
+  });
+}
+
+async function deleteProductRecord() {
+  const db = await openUploadDb();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(uploadStoreName, "readwrite");
+    transaction.objectStore(uploadStoreName).delete(uploadKey);
+    transaction.oncomplete = () => {
+      db.close();
+      resolve();
+    };
+    transaction.onerror = () => {
+      db.close();
+      reject(transaction.error || new Error("Die gespeicherte Datei konnte nicht entfernt werden."));
+    };
+  });
 }
 
 function includesAny(normalizedAnswer, keywords) {
@@ -901,6 +1064,105 @@ function saveAllAnswers() {
   notesStatus.textContent = "Alle Antworten lokal gespeichert.";
 }
 
+async function initializeProductUpload() {
+  if (!productFileInput) return;
+
+  saveProductBtn.disabled = true;
+  deleteProductBtn.disabled = true;
+
+  chooseProductBtn.addEventListener("click", () => {
+    productFileInput.click();
+  });
+
+  productFileInput.addEventListener("change", () => {
+    const file = productFileInput.files?.[0];
+    if (!file) return;
+
+    const validationError = validateProductFile(file);
+    if (validationError) {
+      selectedProductFile = null;
+      productFileInput.value = "";
+      saveProductBtn.disabled = true;
+      productUploadStatus.textContent = validationError;
+      renderProductMeta(savedProductRecord, savedProductRecord ? "bereits lokal abgelegt" : "");
+      return;
+    }
+
+    selectedProductFile = file;
+    saveProductBtn.disabled = false;
+    productUploadStatus.textContent = "Datei geprüft. Du kannst sie jetzt lokal hochladen.";
+    renderProductMeta(
+      {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        savedAt: null
+      },
+      "ausgewählt, noch nicht lokal gespeichert"
+    );
+  });
+
+  saveProductBtn.addEventListener("click", async () => {
+    if (!selectedProductFile) {
+      productUploadStatus.textContent = "Wähle zuerst ein Produkt aus.";
+      return;
+    }
+
+    try {
+      const record = {
+        name: selectedProductFile.name,
+        type: selectedProductFile.type,
+        size: selectedProductFile.size,
+        lastModified: selectedProductFile.lastModified,
+        savedAt: new Date().toISOString(),
+        blob: selectedProductFile
+      };
+
+      await saveProductRecord(record);
+      savedProductRecord = record;
+      selectedProductFile = null;
+      productFileInput.value = "";
+      saveProductBtn.disabled = true;
+      deleteProductBtn.disabled = false;
+      renderProductMeta(record, "lokal im Browser abgelegt");
+      productUploadStatus.textContent = "Produkt lokal hochgeladen. Die Datei bleibt auf diesem Gerät.";
+    } catch (error) {
+      productUploadStatus.textContent = `Die lokale Ablage ist fehlgeschlagen: ${error.message}`;
+    }
+  });
+
+  deleteProductBtn.addEventListener("click", async () => {
+    try {
+      await deleteProductRecord();
+      savedProductRecord = null;
+      selectedProductFile = null;
+      productFileInput.value = "";
+      saveProductBtn.disabled = true;
+      deleteProductBtn.disabled = true;
+      renderProductMeta(null, "");
+      productUploadStatus.textContent = "Die lokale Produktablage wurde geleert.";
+    } catch (error) {
+      productUploadStatus.textContent = `Die gespeicherte Datei konnte nicht entfernt werden: ${error.message}`;
+    }
+  });
+
+  try {
+    savedProductRecord = await loadProductRecord();
+    if (savedProductRecord) {
+      deleteProductBtn.disabled = false;
+      renderProductMeta(savedProductRecord, "lokal im Browser abgelegt");
+      productUploadStatus.textContent = "Es liegt bereits ein lokal gespeichertes Produkt vor.";
+    } else {
+      renderProductMeta(null, "");
+    }
+  } catch (error) {
+    productUploadStatus.textContent = `Lokale Produktablage ist in diesem Browser nicht verfügbar: ${error.message}`;
+    chooseProductBtn.disabled = true;
+    saveProductBtn.disabled = true;
+    deleteProductBtn.disabled = true;
+  }
+}
+
 renderLevitFocus();
 
 comparisonData.forEach((item) => {
@@ -946,6 +1208,7 @@ sectionChecks.forEach((sectionCheck) => {
 
 saveAllBtn.addEventListener("click", saveAllAnswers);
 exportAllBtn.addEventListener("click", exportAllAnswers);
+initializeProductUpload();
 
 renderComparison(comparisonData[0].id);
 renderSource(sourceClusters[0].id);
