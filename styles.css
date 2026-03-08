@@ -23,8 +23,8 @@ body {
   color: var(--ink);
   font-family: "Avenir Next", "Trebuchet MS", sans-serif;
   background:
-    radial-gradient(circle at 15% 10%, rgba(216, 166, 115, 0.18), transparent 26%),
-    linear-gradient(160deg, #1b1415 0%, #3f2728 38%, #19333a 100%);
+    radial-gradient(circle at 14% 12%, rgba(207, 154, 98, 0.22), transparent 28%),
+    linear-gradient(160deg, #1b1415 0%, #4b2b22 34%, #76533e 64%, #2f241f 100%);
 }
 
 a {
@@ -53,17 +53,17 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: blur(3px) saturate(1.08) brightness(0.82);
-  transform: scale(1.05);
-  opacity: 0.96;
+  filter: blur(1.6px) saturate(1.04) brightness(0.9) contrast(1.04);
+  transform: scale(1.03);
+  opacity: 0.98;
   z-index: 0;
 }
 
 .bg-overlay {
   z-index: 1;
   background:
-    linear-gradient(140deg, rgba(18, 12, 12, 0.16), rgba(83, 43, 34, 0.14) 36%, rgba(17, 36, 42, 0.16)),
-    linear-gradient(transparent 72%, rgba(20, 16, 16, 0.06));
+    linear-gradient(140deg, rgba(18, 12, 12, 0.08), rgba(83, 43, 34, 0.08) 36%, rgba(17, 24, 30, 0.1)),
+    linear-gradient(transparent 70%, rgba(20, 16, 16, 0.03));
   pointer-events: none;
 }
 
@@ -104,29 +104,38 @@ main {
 }
 
 .hero-copy {
-  background: linear-gradient(145deg, rgba(15, 12, 12, 0.34), rgba(28, 25, 24, 0.22));
+  background: linear-gradient(145deg, rgba(27, 18, 15, 0.28), rgba(70, 44, 31, 0.18));
 }
 
 .hero-frame {
   align-self: end;
-  background: linear-gradient(145deg, rgba(248, 242, 234, 0.2), rgba(33, 93, 103, 0.22));
+  background: linear-gradient(145deg, rgba(248, 242, 234, 0.24), rgba(178, 104, 55, 0.16));
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: var(--shadow);
 }
 
 .hero-preview {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 8.8;
   object-fit: cover;
   border-radius: 18px;
   margin-bottom: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.24);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
+  filter: saturate(1.04) contrast(1.04) brightness(0.96);
 }
 
 .hero h1 {
   font-size: clamp(3rem, 8vw, 5.5rem);
   text-shadow: 0 6px 28px rgba(0, 0, 0, 0.36);
+}
+
+.hero-subtitle {
+  margin: 0 0 1rem;
+  font-size: clamp(1.25rem, 2.8vw, 1.8rem);
+  color: #f4e4cf;
+  font-family: "Avenir Next", "Trebuchet MS", sans-serif;
+  font-weight: 600;
 }
 
 .lead {
@@ -225,8 +234,7 @@ main {
 .focus-grid,
 .comparison-grid,
 .voice-grid,
-.source-link-grid,
-.transparency-grid {
+.source-link-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
@@ -393,8 +401,7 @@ code {
   .focus-grid,
   .comparison-grid,
   .voice-grid,
-  .source-link-grid,
-  .transparency-grid {
+  .source-link-grid {
     grid-template-columns: 1fr;
   }
 }
